@@ -1,13 +1,49 @@
 name: CI
-on: [push, pull_request]
+
+# Trigger the workflow on push or pull request to the main branch
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+
+# Jobs to run
 jobs:
   test:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-latest # Use the latest Ubuntu environment
+
     steps:
-      - uses: actions/checkout@v2
+      # Check out the repository
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      # Set up Node.js
       - name: Set up Node.js
-        uses: actions/setup-node@v2
+        uses: actions/setup-node@v3
         with:
-          node-version: '18'
-      - run: npm install
-      - run: npm test
+          node-version: 18 # Use Node.js 18 (or the version you're using)
+
+      # Copy .env.example to .env
+      - name: Copy .env.example to .env
+        run: cp .env.example .env
+
+      # Set up environment variables
+      - name: Set up environment variables
+        env:
+          JWT_SECRET: ${{ secrets.JWT_SECRET }}
+          NODEMAILER_EMAIL: ${{ secrets.NODEMAILER_EMAIL }}
+          NODEMAILER_PASSWORD: ${{ secrets.NODEMAILER_PASSWORD }}
+        run: |
+          echo "JWT_SECRET=$JWT_SECRET" >> .env
+          echo "NODEMAILER_EMAIL=$NODEMAILER_EMAIL" >> .env
+          echo "NODEMAILER_PASSWORD=$NODEMAILER_PASSWORD" >> .env
+
+      # Install dependencies
+      - name: Install dependencies
+        run: npm install
+
+      # Run tests
+      - name: Run tests
+        run: npm test
