@@ -16,14 +16,14 @@ exports.register = async (req, res) => {
 
 exports.login = async (req, res) => {
     try {
-        const { username, password } = req.body;
-        const user = users.find(u => u.username === username);
-        if (!user || !(await bcrypt.compare(password, user.password))) {
-            throw new Error('Invalid credentials');
-        }
-        const token = jwt.sign({ id: user.id }, process.env.JWT_SECRET, { expiresIn: '1h' });
-        res.json({ token });
+      const { username, password } = req.body;
+      const user = users.find(u => u.username === username);
+      if (!user || !(await bcrypt.compare(password, user.password))) {
+        throw new Error('Invalid credentials');
+      }
+      const token = jwt.sign({ id: user.id }, process.env.JWT_SECRET, { expiresIn: '1h' });
+      res.json({ token });
     } catch (error) {
-        res.status(400).json({ error: error.message });
+      res.status(400).json({ error: error.message });
     }
-};
+  };
