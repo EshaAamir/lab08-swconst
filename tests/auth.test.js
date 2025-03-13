@@ -38,6 +38,12 @@ describe('Authentication Tests', () => {
         username: 'testuser',
         password: 'testpassword',
       });
+
+    // Log the response body if the test fails
+    if (res.statusCode !== 200) {
+      console.log('Login Response:', res.body);
+    }
+
     expect(res.statusCode).toEqual(200);
     expect(res.body.token).toBeDefined();
   });

@@ -38,6 +38,12 @@ describe('Event Management Tests', () => {
         category: 'Meeting',
         reminder: true,
       });
+
+    // Log the response body if the test fails
+    if (res.statusCode !== 201) {
+      console.log('Create Event Response:', res.body);
+    }
+
     expect(res.statusCode).toEqual(201);
     expect(res.body.name).toEqual('Test Event');
     expect(events.length).toBe(1);
@@ -61,6 +67,12 @@ describe('Event Management Tests', () => {
     const res = await request(app)
       .get('/events')
       .set('Authorization', `Bearer ${token}`);
+
+    // Log the response body if the test fails
+    if (res.statusCode !== 200) {
+      console.log('Retrieve Events Response:', res.body);
+    }
+
     expect(res.statusCode).toEqual(200);
     expect(res.body.length).toBe(1);
     expect(res.body[0].name).toEqual('Test Event');
@@ -94,6 +106,12 @@ describe('Event Management Tests', () => {
     const res = await request(app)
       .get('/events?category=Meeting')
       .set('Authorization', `Bearer ${token}`);
+
+    // Log the response body if the test fails
+    if (res.statusCode !== 200) {
+      console.log('Filtered Events Response:', res.body);
+    }
+
     expect(res.statusCode).toEqual(200);
     expect(res.body.length).toBe(1);
     expect(res.body[0].category).toEqual('Meeting');
